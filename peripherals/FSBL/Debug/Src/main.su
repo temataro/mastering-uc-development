@@ -1,0 +1,2 @@
+../Src/main.c:26:5:main	4	static
+../Src/main.c:40:43:secure_add_one	16	static

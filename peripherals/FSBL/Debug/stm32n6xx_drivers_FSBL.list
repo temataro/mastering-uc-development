@@ -1,0 +1,295 @@
+
+stm32n6xx_drivers_FSBL.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   0000034c  34180400  34180400  00000400  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         00000130  3418074c  3418074c  0000074c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000000  3418087c  341808c0  000008c0  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .ARM.extab    00000000  3418087c  3418087c  000008c0  2**0
+                  CONTENTS, READONLY
+  4 .ARM          00000000  3418087c  3418087c  000008c0  2**0
+                  CONTENTS, READONLY
+  5 .preinit_array 00000000  3418087c  341808c0  000008c0  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  3418087c  3418087c  0000087c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  7 .fini_array   00000004  34180880  34180880  00000880  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  8 .data         00000000  341c0000  341c0000  000008c0  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .noncacheable 00000000  341c0000  341c0000  000008c0  2**0
+                  CONTENTS
+ 10 .gnu.sgstubs  00000020  341808a0  341808a0  000008a0  2**5
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 11 .bss          0000001c  341c0000  341c0000  00001000  2**2
+                  ALLOC
+ 12 ._user_heap_stack 00000604  341c001c  341c001c  00001000  2**0
+                  ALLOC
+ 13 .ARM.attributes 00000032  00000000  00000000  000008c0  2**0
+                  CONTENTS, READONLY
+ 14 .debug_info   000000e1  00000000  00000000  000008f2  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .debug_abbrev 00000099  00000000  00000000  000009d3  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 16 .debug_aranges 00000050  00000000  00000000  00000a70  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 17 .debug_rnglists 00000032  00000000  00000000  00000ac0  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_macro  00000fbf  00000000  00000000  00000af2  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 19 .debug_line   0000045a  00000000  00000000  00001ab1  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 20 .debug_str    00003d4c  00000000  00000000  00001f0b  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 21 .comment      00000043  00000000  00000000  00005c57  2**0
+                  CONTENTS, READONLY
+ 22 .debug_frame  0000007c  00000000  00000000  00005c9c  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 23 .debug_line_str 00000090  00000000  00000000  00005d18  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+3418074c <__do_global_dtors_aux>:
+3418074c:	b510      	push	{r4, lr}
+3418074e:	4c05      	ldr	r4, [pc, #20]	@ (34180764 <__do_global_dtors_aux+0x18>)
+34180750:	7823      	ldrb	r3, [r4, #0]
+34180752:	b933      	cbnz	r3, 34180762 <__do_global_dtors_aux+0x16>
+34180754:	4b04      	ldr	r3, [pc, #16]	@ (34180768 <__do_global_dtors_aux+0x1c>)
+34180756:	b113      	cbz	r3, 3418075e <__do_global_dtors_aux+0x12>
+34180758:	4804      	ldr	r0, [pc, #16]	@ (3418076c <__do_global_dtors_aux+0x20>)
+3418075a:	f3af 8000 	nop.w
+3418075e:	2301      	movs	r3, #1
+34180760:	7023      	strb	r3, [r4, #0]
+34180762:	bd10      	pop	{r4, pc}
+34180764:	341c0000 	.word	0x341c0000
+34180768:	00000000 	.word	0x00000000
+3418076c:	34180864 	.word	0x34180864
+
+34180770 <frame_dummy>:
+34180770:	b508      	push	{r3, lr}
+34180772:	4b03      	ldr	r3, [pc, #12]	@ (34180780 <frame_dummy+0x10>)
+34180774:	b11b      	cbz	r3, 3418077e <frame_dummy+0xe>
+34180776:	4903      	ldr	r1, [pc, #12]	@ (34180784 <frame_dummy+0x14>)
+34180778:	4803      	ldr	r0, [pc, #12]	@ (34180788 <frame_dummy+0x18>)
+3418077a:	f3af 8000 	nop.w
+3418077e:	bd08      	pop	{r3, pc}
+34180780:	00000000 	.word	0x00000000
+34180784:	341c0004 	.word	0x341c0004
+34180788:	34180864 	.word	0x34180864
+
+3418078c <main>:
+#if !defined(__SOFT_FP__) && defined(__ARM_FP)
+  #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
+#endif
+
+int main(void)
+{
+3418078c:	b480      	push	{r7}
+3418078e:	af00      	add	r7, sp, #0
+	 * Add code here for initializing the non-secure stack pointer
+	 * and then perform the jump to the non-secure reset handler
+	 */
+
+    /* Loop forever */
+	for(;;);
+34180790:	bf00      	nop
+34180792:	e7fd      	b.n	34180790 <main+0x4>
+
+34180794 <__acle_se_secure_add_one>:
+}
+
+/**
+ * This function is Secure and is call-able from Non-Secure regions.
+ */
+__attribute__((cmse_nonsecure_entry)) int secure_add_one(int value) {
+34180794:	ed6d cf81 	vstr	FPCXTNS, [sp, #-4]!
+34180798:	b480      	push	{r7}
+3418079a:	b082      	sub	sp, #8
+3418079c:	af00      	add	r7, sp, #0
+3418079e:	6078      	str	r0, [r7, #4]
+	return value + 1;
+341807a0:	687b      	ldr	r3, [r7, #4]
+341807a2:	3301      	adds	r3, #1
+}
+341807a4:	4618      	mov	r0, r3
+341807a6:	3708      	adds	r7, #8
+341807a8:	46bd      	mov	sp, r7
+341807aa:	bc80      	pop	{r7}
+341807ac:	ec9f 0a10 	vscclrm	{s0-s15, VPR}
+341807b0:	e89f 900e 	clrm	{r1, r2, r3, ip, APSR}
+341807b4:	ecfd cf81 	vldr	FPCXTNS, [sp], #4
+341807b8:	4774      	bxns	lr
+	...
+
+341807bc <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   sp, =_estack    /* set stack pointer */
+341807bc:	f8df d03c 	ldr.w	sp, [pc, #60]	@ 341807fc <LoopForever+0x4>
+  ldr   r0, =_sstack
+341807c0:	480f      	ldr	r0, [pc, #60]	@ (34180800 <LoopForever+0x8>)
+  msr   MSPLIM, r0      /* set stack pointer limit */
+341807c2:	f380 880a 	msr	MSPLIM, r0
+/* Call the clock system initialization function.*/
+  bl  SystemInit
+341807c6:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+341807ca:	480e      	ldr	r0, [pc, #56]	@ (34180804 <LoopForever+0xc>)
+  ldr r1, =_edata
+341807cc:	490e      	ldr	r1, [pc, #56]	@ (34180808 <LoopForever+0x10>)
+  ldr r2, =_sidata
+341807ce:	4a0f      	ldr	r2, [pc, #60]	@ (3418080c <LoopForever+0x14>)
+  movs r3, #0
+341807d0:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+341807d2:	e002      	b.n	341807da <LoopCopyDataInit>
+
+341807d4 <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+341807d4:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+341807d6:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+341807d8:	3304      	adds	r3, #4
+
+341807da <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+341807da:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+341807dc:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+341807de:	d3f9      	bcc.n	341807d4 <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+341807e0:	4a0b      	ldr	r2, [pc, #44]	@ (34180810 <LoopForever+0x18>)
+  ldr r4, =_ebss
+341807e2:	4c0c      	ldr	r4, [pc, #48]	@ (34180814 <LoopForever+0x1c>)
+  movs r3, #0
+341807e4:	2300      	movs	r3, #0
+  b LoopFillZerobss
+341807e6:	e001      	b.n	341807ec <LoopFillZerobss>
+
+341807e8 <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+341807e8:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+341807ea:	3204      	adds	r2, #4
+
+341807ec <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+341807ec:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+341807ee:	d3fb      	bcc.n	341807e8 <FillZerobss>
+
+
+/* Call static constructors */
+  bl __libc_init_array
+341807f0:	f000 f814 	bl	3418081c <__libc_init_array>
+/* Call the application's entry point.*/
+
+  bl main
+341807f4:	f7ff ffca 	bl	3418078c <main>
+
+341807f8 <LoopForever>:
+
+LoopForever:
+  b LoopForever
+341807f8:	e7fe      	b.n	341807f8 <LoopForever>
+341807fa:	0000      	.short	0x0000
+  ldr   sp, =_estack    /* set stack pointer */
+341807fc:	34200000 	.word	0x34200000
+  ldr   r0, =_sstack
+34180800:	341ffc00 	.word	0x341ffc00
+  ldr r0, =_sdata
+34180804:	341c0000 	.word	0x341c0000
+  ldr r1, =_edata
+34180808:	341c0000 	.word	0x341c0000
+  ldr r2, =_sidata
+3418080c:	34180884 	.word	0x34180884
+  ldr r2, =_sbss
+34180810:	341c0000 	.word	0x341c0000
+  ldr r4, =_ebss
+34180814:	341c001c 	.word	0x341c001c
+
+34180818 <ADC12_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+34180818:	e7fe      	b.n	34180818 <ADC12_IRQHandler>
+	...
+
+3418081c <__libc_init_array>:
+3418081c:	b570      	push	{r4, r5, r6, lr}
+3418081e:	4b0d      	ldr	r3, [pc, #52]	@ (34180854 <__libc_init_array+0x38>)
+34180820:	2600      	movs	r6, #0
+34180822:	4d0d      	ldr	r5, [pc, #52]	@ (34180858 <__libc_init_array+0x3c>)
+34180824:	1b5b      	subs	r3, r3, r5
+34180826:	109c      	asrs	r4, r3, #2
+34180828:	42a6      	cmp	r6, r4
+3418082a:	d109      	bne.n	34180840 <__libc_init_array+0x24>
+3418082c:	4d0b      	ldr	r5, [pc, #44]	@ (3418085c <__libc_init_array+0x40>)
+3418082e:	f000 f819 	bl	34180864 <_init>
+34180832:	4b0b      	ldr	r3, [pc, #44]	@ (34180860 <__libc_init_array+0x44>)
+34180834:	2600      	movs	r6, #0
+34180836:	1b5b      	subs	r3, r3, r5
+34180838:	109c      	asrs	r4, r3, #2
+3418083a:	42a6      	cmp	r6, r4
+3418083c:	d105      	bne.n	3418084a <__libc_init_array+0x2e>
+3418083e:	bd70      	pop	{r4, r5, r6, pc}
+34180840:	f855 3b04 	ldr.w	r3, [r5], #4
+34180844:	3601      	adds	r6, #1
+34180846:	4798      	blx	r3
+34180848:	e7ee      	b.n	34180828 <__libc_init_array+0xc>
+3418084a:	f855 3b04 	ldr.w	r3, [r5], #4
+3418084e:	3601      	adds	r6, #1
+34180850:	4798      	blx	r3
+34180852:	e7f2      	b.n	3418083a <__libc_init_array+0x1e>
+34180854:	3418087c 	.word	0x3418087c
+34180858:	3418087c 	.word	0x3418087c
+3418085c:	3418087c 	.word	0x3418087c
+34180860:	34180880 	.word	0x34180880
+
+34180864 <_init>:
+34180864:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+34180866:	bf00      	nop
+34180868:	bcf8      	pop	{r3, r4, r5, r6, r7}
+3418086a:	bc08      	pop	{r3}
+3418086c:	469e      	mov	lr, r3
+3418086e:	4770      	bx	lr
+
+34180870 <_fini>:
+34180870:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+34180872:	bf00      	nop
+34180874:	bcf8      	pop	{r3, r4, r5, r6, r7}
+34180876:	bc08      	pop	{r3}
+34180878:	469e      	mov	lr, r3
+3418087a:	4770      	bx	lr
+
+Disassembly of section .gnu.sgstubs:
+
+341808a0 <secure_add_one>:
+341808a0:	e97f e97f 	sg
+341808a4:	f7ff bf76 	b.w	34180794 <__acle_se_secure_add_one>
+	...
